@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - gupikkk Inventory System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+  <style>
+    /* Login Page Specific Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #0f766e 0%, #115e59 50%, #0c0a09 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .login-logo i {
+      font-size: 2.5rem;
+      color: #0f766e;
+    }
+
+    .login-logo span {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0c0a09;
+    }
+
+    .login-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0c0a09;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .login-header p {
+      color: #78716c;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #0c0a09;
+      font-size: 0.9rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 1rem;
+      color: #78716c;
+      font-size: 1.1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 3rem;
+      border: 1.5px solid #e7e5e4;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #fafaf9;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0f766e;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #78716c;
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+
+    .password-toggle:hover {
+      color: #0f766e;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(15, 118, 110, 0.4);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-login i {
+      margin-left: 0.5rem;
+    }
+
+    .demo-accounts {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e7e5e4;
+    }
+
+    .demo-accounts h4 {
+      font-size: 0.85rem;
+      color: #78716c;
+      margin: 0 0 1rem 0;
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .btn-demo {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #e7e5e4;
+      background: #fafaf9;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-demo:hover {
+      border-color: #0f766e;
+      background: white;
+      transform: translateX(4px);
+    }
+
+    .btn-demo-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-demo i {
+      font-size: 1.2rem;
+    }
+
+    .btn-demo-role {
+      font-weight: 600;
+      color: #0c0a09;
+    }
+
+    .btn-demo-email {
+      font-size: 0.8rem;
+      color: #78716c;
+    }
+
+    .btn-demo-arrow {
+      color: #0f766e;
+      font-size: 1rem;
+    }
+
+    .error-message {
+      padding: 1rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      color: #dc2626;
+      font-size: 0.9rem;
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .error-message.show {
+      display: flex;
+    }
+
+    .error-message i {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .login-container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Header -->
+      <div class="login-header">
+        <div class="login-logo">
+          <i class="ri-stack-line"></i>
+          <span>gupikkk</span>
+        </div>
+        <h2>Selamat Datang</h2>
+        <p>Masuk ke akun Anda untuk melanjutkan</p>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" id="errorMessage">
+        <i class="ri-error-warning-line"></i>
+        <span id="errorText">Email atau password salah</span>
+      </div>
+
+      <!-- Login Form -->
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <i class="ri-mail-line"></i>
+            <input 
+              type="email" 
+              id="email" 
+              class="form-input" 
+              placeholder="nama@email.com"
+              required 
+              autocomplete="email"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <i class="ri-lock-line"></i>
+            <input 
+              type="password" 
+              id="password" 
+              class="form-input" 
+              placeholder="Masukkan password"
+              required 
+              autocomplete="current-password"
+            />
+            <button type="button" class="password-toggle" id="togglePassword">
+              <i class="ri-eye-line"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          Masuk
+          <i class="ri-arrow-right-line"></i>
+        </button>
+      </form>
+
+      <!-- Demo Accounts -->
+      <div class="demo-accounts">
+        <h4>Akun Demo (Klik untuk login)</h4>
+        <div class="demo-buttons">
+          <button class="btn-demo" onclick="fillDemo('admin@gupikkk.com', 'admin123')">
+            <div class="btn-demo-left">
+              <i class="ri-shield-star-line" style="color: #dc2626;"></i>
+              <div>
+                <div class="btn-demo-role">Superadmin</div>
+                <div class="btn-demo-email">admin@gupikkk.com</div>
+              </div>
+            </div>
+            <i class="ri-arrow-right-s-line btn-demo-arrow"></i>
+          </button>
+
+          <button class="btn-demo" onclick="fillDemo('gudang@gupikkk.com', 'gudang123')">
+            <div class="btn-demo-left">
+              <i class="ri-archive-line" style="color: #0f766e;"></i>
+              <div>
+                <div class="btn-demo-role">Petugas Gudang</div>
+                <div class="btn-demo-email">gudang@gupikkk.com</div>
+              </div>
+            </div>
+            <i class="ri-arrow-right-s-line btn-demo-arrow"></i>
+          </button>
+
+          <button class="btn-demo" onclick="fillDemo('kasir@gupikkk.com', 'kasir123')">
+            <div class="btn-demo-left">
+              <i class="ri-shopping-cart-line" style="color: #f59e0b;"></i>
+              <div>
+                <div class="btn-demo-role">Kasir</div>
+                <div class="btn-demo-email">kasir@gupikkk.com</div>
+              </div>
+            </div>
+            <i class="ri-arrow-right-s-line btn-demo-arrow"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <!-- Seed users script (untuk setup pertama kali) -->
+  <script src="js/seed-users.js"></script>
+</body>
+</html>

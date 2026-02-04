@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gupikkk &mdash; Inventory Management System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="ri-stack-line"></i>
+        <span>gupikkk</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="ri-menu-fold-line"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item active" data-page="dashboard">
+          <i class="ri-dashboard-3-line"></i>
+          <span>Dashboard</span>
+        </li>
+        <li class="nav-item" data-page="products">
+          <i class="ri-box-3-line"></i>
+          <span>Produk</span>
+        </li>
+        <li class="nav-item" data-page="categories">
+          <i class="ri-folder-3-line"></i>
+          <span>Kategori</span>
+        </li>
+        <li class="nav-item" data-page="reports">
+          <i class="ri-bar-chart-line"></i>
+          <span>Laporan & Analisis</span>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="ri-user-3-line"></i>
+        </div>
+        <div class="user-detail">
+          <span class="user-name" id="userName">Administrator</span>
+          <span class="user-role">Super Admin</span>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="logout()" style="width: 100%; margin-top: 1rem;">
+        <i class="ri-logout-box-line"></i> Keluar
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="ri-menu-line"></i>
+        </button>
+        <div class="page-title">
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Selamat datang kembali, Administrator</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i class="ri-search-line"></i>
+          <input type="text" id="globalSearch" placeholder="Cari produk..." />
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="ri-moon-line"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard Page -->
+    <section class="page active" id="page-dashboard">
+      <!-- Tombol Seed Data (hanya untuk development) -->
+      <div class="page-actions" style="margin-bottom: 1.5rem;">
+        <div class="filter-group"></div>
+        <button class="btn btn-primary" id="seedDataBtn" onclick="seedData()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+          <i class="ri-database-2-line"></i>
+          Tambah Data Dummy
+        </button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="ri-box-3-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalProducts">0</span>
+            <span class="stat-label">Total Produk</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="ri-folder-3-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalCategories">0</span>
+            <span class="stat-label">Kategori</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <i class="ri-archive-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalStock">0</span>
+            <span class="stat-label">Total Stok</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <i class="ri-error-warning-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="lowStock">0</span>
+            <span class="stat-label">Stok Rendah</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Recent Products -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ri-time-line"></i> Produk Terbaru</h3>
+          </div>
+          <div class="card-body">
+            <div class="recent-products-list" id="recentProducts">
+              <div class="empty-state small">
+                <i class="ri-inbox-line"></i>
+                <p>Belum ada produk</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alert -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ri-alarm-warning-line"></i> Peringatan Stok Rendah</h3>
+          </div>
+          <div class="card-body">
+            <div class="low-stock-list" id="lowStockList">
+              <div class="empty-state small">
+                <i class="ri-checkbox-circle-line"></i>
+                <p>Semua stok aman</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Page -->
+    <section class="page" id="page-products">
+      <div class="page-actions">
+        <div class="filter-group">
+          <select id="filterCategory" class="form-select">
+            <option value="">Semua Kategori</option>
+          </select>
+          <select id="filterStock" class="form-select">
+            <option value="">Semua Status</option>
+            <option value="in-stock">Tersedia</option>
+            <option value="low-stock">Stok Rendah</option>
+            <option value="out-of-stock">Habis</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="addProductBtn">
+          <i class="ri-add-line"></i>
+          Tambah Produk
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-body no-padding">
+          <div class="table-responsive">
+            <table class="data-table" id="productsTable">
+              <thead>
+                <tr>
+                  <th>Produk</th>
+                  <th>Kategori</th>
+                  <th>Harga</th>
+                  <th>Stok</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <tr>
+                  <td colspan="6">
+                    <div class="empty-state">
+                      <i class="ri-box-3-line"></i>
+                      <h3>Belum ada produk</h3>
+                      <p>Klik "Tambah Produk" untuk menambahkan produk pertama.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Page -->
+    <section class="page" id="page-categories">
+      <div class="page-actions">
+        <div class="filter-group"></div>
+        <button class="btn btn-primary" id="addCategoryBtn">
+          <i class="ri-add-line"></i>
+          Tambah Kategori
+        </button>
+      </div>
+
+      <div class="categories-grid" id="categoriesGrid">
+        <div class="empty-state">
+          <i class="ri-folder-3-line"></i>
+          <h3>Belum ada kategori</h3>
+          <p>Klik "Tambah Kategori" untuk menambahkan kategori pertama.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reports Page -->
+    <section class="page" id="page-reports">
+      <!-- Filter Period -->
+      <div class="page-actions" style="margin-bottom: 1.5rem;">
+        <div class="filter-group">
+          <select id="reportPeriod" class="form-select">
+            <option value="today">Hari Ini</option>
+            <option value="week">Minggu Ini</option>
+            <option value="month" selected>Bulan Ini</option>
+            <option value="year">Tahun Ini</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input type="date" id="reportDateFrom" class="form-input" style="display: none;" />
+          <input type="date" id="reportDateTo" class="form-input" style="display: none;" />
+        </div>
+        <button class="btn btn-primary" id="addExpenseBtn">
+          <i class="ri-add-line"></i>
+          Tambah Pengeluaran
+        </button>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="ri-money-dollar-circle-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalIncome">Rp 0</span>
+            <span class="stat-label">Total Penghasilan</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <i class="ri-money-dollar-circle-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalExpense">Rp 0</span>
+            <span class="stat-label">Total Pengeluaran</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="ri-line-chart-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="netProfit">Rp 0</span>
+            <span class="stat-label">Laba Bersih</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">
+            <i class="ri-shopping-cart-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalTransactions">0</span>
+            <span class="stat-label">Total Transaksi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <!-- Income vs Expense Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ri-bar-chart-line"></i> Penghasilan vs Pengeluaran</h3>
+          </div>
+          <div class="card-body">
+            <canvas id="incomeExpenseChart" style="max-height: 300px;"></canvas>
+          </div>
+        </div>
+
+        <!-- Transaction Trend Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ri-line-chart-line"></i> Trend Transaksi</h3>
+          </div>
+          <div class="card-body">
+            <canvas id="transactionTrendChart" style="max-height: 300px;"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock Movement Chart -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <h3><i class="ri-stack-line"></i> Analisis Keluar Masuk Barang</h3>
+        </div>
+        <div class="card-body">
+          <canvas id="stockMovementChart" style="max-height: 300px;"></canvas>
+        </div>
+      </div>
+
+      <!-- Detailed Reports -->
+      <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <!-- Top Selling Products -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ri-fire-line"></i> Produk Terlaris</h3>
+          </div>
+          <div class="card-body no-padding">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Produk</th>
+                    <th>Terjual</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="topProductsTableBody">
+                  <tr>
+                    <td colspan="3">
+                      <div class="empty-state small">
+                        <i class="ri-inbox-line"></i>
+                        <p>Belum ada data</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Expenses -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ri-file-list-line"></i> Pengeluaran Terbaru</h3>
+          </div>
+          <div class="card-body no-padding">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Keterangan</th>
+                    <th>Jumlah</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
+                <tbody id="recentExpensesTableBody">
+                  <tr>
+                    <td colspan="3">
+                      <div class="empty-state small">
+                        <i class="ri-inbox-line"></i>
+                        <p>Belum ada pengeluaran</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="productModalTitle">Tambah Produk</h2>
+        <button class="modal-close" id="closeProductModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <form id="productForm" class="modal-body">
+        <input type="hidden" id="productId" />
+        <div class="form-group">
+          <label for="productName">Nama Produk <span class="required">*</span></label>
+          <input type="text" id="productName" class="form-input" placeholder="Masukkan nama produk" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productCategory">Kategori <span class="required">*</span></label>
+            <select id="productCategory" class="form-select" required>
+              <option value="">Pilih Kategori</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productSku">SKU</label>
+            <input type="text" id="productSku" class="form-input" placeholder="AUTO" readonly />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productPrice">Harga (Rp) <span class="required">*</span></label>
+            <input type="number" id="productPrice" class="form-input" placeholder="0" min="0" required />
+          </div>
+          <div class="form-group">
+            <label for="productStock">Stok <span class="required">*</span></label>
+            <input type="number" id="productStock" class="form-input" placeholder="0" min="0" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="productDescription">Deskripsi</label>
+          <textarea id="productDescription" class="form-input" rows="3" placeholder="Deskripsi produk (opsional)"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelProductBtn">Batal</button>
+          <button type="submit" class="btn btn-primary" id="saveProductBtn">
+            <i class="ri-save-line"></i> Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category Modal -->
+  <div class="modal-overlay" id="categoryModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 id="categoryModalTitle">Tambah Kategori</h2>
+        <button class="modal-close" id="closeCategoryModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <form id="categoryForm" class="modal-body">
+        <input type="hidden" id="categoryId" />
+        <div class="form-group">
+          <label for="categoryName">Nama Kategori <span class="required">*</span></label>
+          <input type="text" id="categoryName" class="form-input" placeholder="Masukkan nama kategori" required />
+        </div>
+        <div class="form-group">
+          <label for="categoryDescription">Deskripsi</label>
+          <textarea id="categoryDescription" class="form-input" rows="2" placeholder="Deskripsi kategori (opsional)"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelCategoryBtn">Batal</button>
+          <button type="submit" class="btn btn-primary" id="saveCategoryBtn">
+            <i class="ri-save-line"></i> Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Konfirmasi Hapus</h2>
+        <button class="modal-close" id="closeDeleteModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="delete-confirm">
+          <div class="delete-icon">
+            <i class="ri-delete-bin-line"></i>
+          </div>
+          <p id="deleteMessage">Apakah Anda yakin ingin menghapus item ini?</p>
+          <span class="delete-warning">Tindakan ini tidak dapat dibatalkan.</span>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelDeleteBtn">Batal</button>
+          <button class="btn btn-danger" id="confirmDeleteBtn">
+            <i class="ri-delete-bin-line"></i> Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expense Modal -->
+  <div class="modal-overlay" id="expenseModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 id="expenseModalTitle">Tambah Pengeluaran</h2>
+        <button class="modal-close" id="closeExpenseModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <form id="expenseForm" class="modal-body">
+        <input type="hidden" id="expenseId" />
+        <div class="form-group">
+          <label for="expenseDescription">Keterangan <span class="required">*</span></label>
+          <input type="text" id="expenseDescription" class="form-input" placeholder="Contoh: Beli stok barang, sewa gudang, dll" required />
+        </div>
+        <div class="form-group">
+          <label for="expenseAmount">Jumlah (Rp) <span class="required">*</span></label>
+          <input type="number" id="expenseAmount" class="form-input" placeholder="0" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="expenseCategory">Kategori</label>
+          <select id="expenseCategory" class="form-select">
+            <option value="operational">Operasional</option>
+            <option value="stock">Pembelian Stok</option>
+            <option value="rent">Sewa</option>
+            <option value="utility">Listrik & Air</option>
+            <option value="other">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expenseDate">Tanggal</label>
+          <input type="date" id="expenseDate" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label for="expenseNote">Catatan</label>
+          <textarea id="expenseNote" class="form-input" rows="2" placeholder="Catatan tambahan (opsional)"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelExpenseBtn">Batal</button>
+          <button type="submit" class="btn btn-primary" id="saveExpenseBtn">
+            <i class="ri-save-line"></i> Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Memuat data...</p>
+    </div>
+  </div>
+
+  <!-- Chart.js for Graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/reports.js"></script>
+  <!-- Script untuk menambahkan data dummy (hanya untuk testing) -->
+  <script src="js/seed-data.js"></script>
+</body>
+</html>

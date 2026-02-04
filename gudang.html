@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petugas Gudang - gupikkk</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="ri-archive-line"></i>
+        <span>gupikkk Gudang</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="ri-menu-fold-line"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item active" data-page="stock">
+          <i class="ri-database-2-line"></i>
+          <span>Kelola Stok</span>
+        </li>
+        <li class="nav-item" data-page="products">
+          <i class="ri-box-3-line"></i>
+          <span>Daftar Produk</span>
+        </li>
+        <li class="nav-item" data-page="categories">
+          <i class="ri-folder-3-line"></i>
+          <span>Kategori</span>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="ri-user-3-line"></i>
+        </div>
+        <div class="user-detail">
+          <span class="user-name" id="userName">Petugas Gudang</span>
+          <span class="user-role">Petugas Gudang</span>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="logout()" style="width: 100%; margin-top: 1rem;">
+        <i class="ri-logout-box-line"></i> Keluar
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="ri-menu-line"></i>
+        </button>
+        <div class="page-title">
+          <h1 id="pageTitle">Kelola Stok</h1>
+          <p id="pageSubtitle">Manajemen stok barang gudang</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i class="ri-search-line"></i>
+          <input type="text" id="globalSearch" placeholder="Cari produk..." />
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="ri-moon-line"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Stock Management Page -->
+    <section class="page active" id="page-stock">
+      <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="ri-box-3-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalProducts">0</span>
+            <span class="stat-label">Total Produk</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="ri-archive-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalStock">0</span>
+            <span class="stat-label">Total Stok</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <i class="ri-error-warning-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="lowStock">0</span>
+            <span class="stat-label">Stok Rendah</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="ri-database-2-line"></i> Kelola Stok Produk</h3>
+        </div>
+        <div class="card-body no-padding">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Produk</th>
+                  <th>SKU</th>
+                  <th>Stok Saat Ini</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="stockTableBody">
+                <!-- Loaded via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Page (Read Only) -->
+    <section class="page" id="page-products">
+      <div class="page-actions">
+        <div class="filter-group">
+          <select id="filterCategory" class="form-select">
+            <option value="">Semua Kategori</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="addProductBtn">
+          <i class="ri-add-line"></i>
+          Tambah Produk
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-body no-padding">
+          <div class="table-responsive">
+            <table class="data-table" id="productsTable">
+              <thead>
+                <tr>
+                  <th>Produk</th>
+                  <th>Kategori</th>
+                  <th>Harga</th>
+                  <th>Stok</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <!-- Loaded via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Page -->
+    <section class="page" id="page-categories">
+      <div class="page-actions">
+        <div class="filter-group"></div>
+        <button class="btn btn-primary" id="addCategoryBtn">
+          <i class="ri-add-line"></i>
+          Tambah Kategori
+        </button>
+      </div>
+
+      <div class="categories-grid" id="categoriesGrid">
+        <!-- Loaded via JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Stock Update Modal -->
+  <div class="modal-overlay" id="stockModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Update Stok</h2>
+        <button class="modal-close" id="closeStockModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <form id="stockForm" class="modal-body">
+        <input type="hidden" id="stockProductId" />
+        <div class="form-group">
+          <label>Produk</label>
+          <input type="text" id="stockProductName" class="form-input" readonly style="background: #fafaf9;" />
+        </div>
+        <div class="form-group">
+          <label>Stok Saat Ini</label>
+          <input type="number" id="stockCurrent" class="form-input" readonly style="background: #fafaf9;" />
+        </div>
+        <div class="form-group">
+          <label>Jenis Update</label>
+          <select id="stockUpdateType" class="form-select">
+            <option value="add">Tambah Stok</option>
+            <option value="subtract">Kurangi Stok</option>
+            <option value="set">Set Stok Langsung</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Jumlah <span class="required">*</span></label>
+          <input type="number" id="stockAmount" class="form-input" placeholder="0" min="0" required />
+        </div>
+        <div class="form-group">
+          <label>Keterangan</label>
+          <textarea id="stockNote" class="form-input" rows="2" placeholder="Opsional"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelStockBtn">Batal</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="ri-save-line"></i> Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Product Modal (sama seperti di index.html) -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="productModalTitle">Tambah Produk</h2>
+        <button class="modal-close" id="closeProductModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <form id="productForm" class="modal-body">
+        <input type="hidden" id="productId" />
+        <div class="form-group">
+          <label for="productName">Nama Produk <span class="required">*</span></label>
+          <input type="text" id="productName" class="form-input" placeholder="Masukkan nama produk" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productCategory">Kategori <span class="required">*</span></label>
+            <select id="productCategory" class="form-select" required>
+              <option value="">Pilih Kategori</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productSku">SKU</label>
+            <input type="text" id="productSku" class="form-input" placeholder="AUTO" readonly />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productPrice">Harga (Rp) <span class="required">*</span></label>
+            <input type="number" id="productPrice" class="form-input" placeholder="0" min="0" required />
+          </div>
+          <div class="form-group">
+            <label for="productStock">Stok <span class="required">*</span></label>
+            <input type="number" id="productStock" class="form-input" placeholder="0" min="0" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="productDescription">Deskripsi</label>
+          <textarea id="productDescription" class="form-input" rows="3" placeholder="Deskripsi produk (opsional)"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelProductBtn">Batal</button>
+          <button type="submit" class="btn btn-primary" id="saveProductBtn">
+            <i class="ri-save-line"></i> Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category Modal (sama seperti di index.html) -->
+  <div class="modal-overlay" id="categoryModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 id="categoryModalTitle">Tambah Kategori</h2>
+        <button class="modal-close" id="closeCategoryModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <form id="categoryForm" class="modal-body">
+        <input type="hidden" id="categoryId" />
+        <div class="form-group">
+          <label for="categoryName">Nama Kategori <span class="required">*</span></label>
+          <input type="text" id="categoryName" class="form-input" placeholder="Masukkan nama kategori" required />
+        </div>
+        <div class="form-group">
+          <label for="categoryDescription">Deskripsi</label>
+          <textarea id="categoryDescription" class="form-input" rows="2" placeholder="Deskripsi kategori (opsional)"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelCategoryBtn">Batal</button>
+          <button type="submit" class="btn btn-primary" id="saveCategoryBtn">
+            <i class="ri-save-line"></i> Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Konfirmasi Hapus</h2>
+        <button class="modal-close" id="closeDeleteModal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="delete-confirm">
+          <div class="delete-icon">
+            <i class="ri-delete-bin-line"></i>
+          </div>
+          <p id="deleteMessage">Apakah Anda yakin ingin menghapus item ini?</p>
+          <span class="delete-warning">Tindakan ini tidak dapat dibatalkan.</span>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelDeleteBtn">Batal</button>
+          <button class="btn btn-danger" id="confirmDeleteBtn">
+            <i class="ri-delete-bin-line"></i> Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Memuat data...</p>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <!-- Seed data script (untuk setup jika belum ada data) -->
+  <script src="js/seed-data.js"></script>
+  <script src="js/gudang-app.js"></script>
+</body>
+</html>
