@@ -79,6 +79,28 @@
 
     <!-- Cashier Page -->
     <section class="page active" id="page-cashier">
+      <!-- Input Nama Kasir -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-body">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <label for="cashierName" style="font-weight: 600; min-width: 120px;">
+              <i class="ri-user-line"></i> Nama Kasir:
+            </label>
+            <input 
+              type="text" 
+              id="cashierName" 
+              class="form-input" 
+              placeholder="Masukkan nama kasir" 
+              style="flex: 1; max-width: 300px;"
+              required
+            />
+            <span style="font-size: 0.9rem; color: #78716c;">
+              <i class="ri-information-line"></i> Wajib diisi sebelum transaksi
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div class="dashboard-grid" style="grid-template-columns: 1.5fr 1fr; gap: 1.5rem;">
         
         <!-- Product List -->
@@ -121,10 +143,37 @@
               <span style="font-weight: 600;">Total Items:</span>
               <span id="totalItems" style="font-weight: 700;">0</span>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 1.5rem;">
               <span style="font-weight: 700;">Total:</span>
               <span id="totalPrice" style="font-weight: 800; color: #0f766e;">Rp 0</span>
             </div>
+            
+            <!-- Input Jumlah Uang -->
+            <div style="margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid #e7e5e4;">
+              <label for="cashAmount" style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.95rem;">
+                <i class="ri-money-dollar-circle-line"></i> Jumlah Uang:
+              </label>
+              <input 
+                type="number" 
+                id="cashAmount" 
+                class="form-input" 
+                placeholder="0" 
+                min="0"
+                style="width: 100%; font-size: 1.2rem; font-weight: 600; text-align: right;"
+                oninput="kasirApp.calculateChange()"
+              />
+            </div>
+
+            <!-- Kembalian -->
+            <div id="changeSection" style="display: none; margin-bottom: 1.5rem; padding: 1rem; background: #d1fae5; border-radius: 8px; border: 2px solid #0f766e;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; font-size: 1.2rem; color: #065f46;">
+                  <i class="ri-exchange-dollar-line"></i> Kembalian:
+                </span>
+                <span id="changeAmount" style="font-weight: 800; font-size: 1.5rem; color: #065f46;">Rp 0</span>
+              </div>
+            </div>
+
             <button class="btn btn-primary" onclick="checkout()" id="checkoutBtn" style="width: 100%; padding: 1rem; font-size: 1.1rem;" disabled>
               <i class="ri-checkbox-circle-line"></i>
               Proses Pembayaran
@@ -134,13 +183,108 @@
       </div>
     </section>
 
+    <!-- Receipt/Struk Modal (Hidden, untuk print) -->
+    <div id="receiptContent" style="display: none;">
+      <!-- Struk akan di-generate di sini -->
+    </div>
+
     <!-- Transactions Page -->
     <section class="page" id="page-transactions">
+      <!-- Filter Section -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <!-- Filter Periode -->
+            <div class="form-group">
+              <label for="filterPeriod" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                <i class="ri-calendar-line"></i> Periode
+              </label>
+              <select id="filterPeriod" class="form-select">
+                <option value="today">Hari Ini</option>
+                <option value="week">Minggu Ini</option>
+                <option value="month">Bulan Ini</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+
+            <!-- Custom Date Range -->
+            <div class="form-group" id="customDateGroup" style="display: none;">
+              <label for="filterDateFrom" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                <i class="ri-calendar-check-line"></i> Dari Tanggal
+              </label>
+              <input type="date" id="filterDateFrom" class="form-input" />
+            </div>
+
+            <div class="form-group" id="customDateToGroup" style="display: none;">
+              <label for="filterDateTo" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                <i class="ri-calendar-check-line"></i> Sampai Tanggal
+              </label>
+              <input type="date" id="filterDateTo" class="form-input" />
+            </div>
+
+            <!-- Filter Nama Kasir -->
+            <div class="form-group">
+              <label for="filterCashier" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                <i class="ri-user-line"></i> Nama Kasir
+              </label>
+              <select id="filterCashier" class="form-select">
+                <option value="">Semua Kasir</option>
+              </select>
+            </div>
+
+            <!-- Filter Kategori -->
+            <div class="form-group">
+              <label for="filterCategoryTransaction" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                <i class="ri-folder-3-line"></i> Kategori Produk
+              </label>
+              <select id="filterCategoryTransaction" class="form-select">
+                <option value="">Semua Kategori</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button class="btn btn-primary" onclick="kasirApp.loadTransactions()">
+              <i class="ri-search-line"></i> Filter
+            </button>
+            <button class="btn btn-secondary" onclick="kasirApp.resetTransactionFilters()">
+              <i class="ri-refresh-line"></i> Reset
+            </button>
+            <button class="btn btn-secondary" onclick="kasirApp.loadTransactions()">
+              <i class="ri-refresh-line"></i> Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="ri-file-list-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="transactionCount">0</span>
+            <span class="stat-label">Total Transaksi</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="ri-money-dollar-circle-line"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="transactionTotal">Rp 0</span>
+            <span class="stat-label">Total Penjualan</span>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
-          <h3><i class="ri-file-list-line"></i> Riwayat Transaksi Hari Ini</h3>
-          <button class="btn btn-secondary" onclick="loadTransactions()">
-            <i class="ri-refresh-line"></i> Refresh
+          <h3><i class="ri-file-list-line"></i> Riwayat Transaksi</h3>
+          <button class="btn btn-primary" onclick="kasirApp.exportTransactions()" id="exportBtn">
+            <i class="ri-download-line"></i> Export Excel
           </button>
         </div>
         <div class="card-body no-padding">

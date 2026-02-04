@@ -2,12 +2,24 @@
 
 ## 🚀 Cara Setup (Pertama Kali)
 
-### Cara Paling Mudah:
+### Langkah Setup:
 
-1. **Buka file `setup.html` di browser**
-2. **Klik tombol "Jalankan Semua Setup"**
-3. **Tunggu sampai selesai**
-4. **Buka `login.html` untuk login**
+1. **Buka file `login.html` di browser**
+2. **Buka Console** browser (tekan **F12**)
+3. **Jalankan perintah ini di console:**
+
+```javascript
+// Langkah 1: Buat user dummy
+seedUsers()
+
+// Tunggu sampai selesai, lalu jalankan:
+
+// Langkah 2: Tambah data dummy
+seedData()
+```
+
+4. **Setelah selesai, refresh halaman login**
+5. **Login dengan salah satu akun demo**
 
 Selesai! Sistem siap digunakan.
 
@@ -93,7 +105,7 @@ Data ter-update otomatis tanpa perlu refresh halaman.
 
 ### Q: Data dummy tidak muncul?
 **A:** Pastikan sudah:
-1. Membuat user dengan `seedUsers()` atau via `setup.html`
+1. Membuat user dengan `seedUsers()` di console browser
 2. Menambah data dengan `seedData()` atau klik tombol orange di dashboard
 
 ### Q: Lupa password?

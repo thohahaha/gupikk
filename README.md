@@ -42,33 +42,39 @@ git clone https://github.com/thohahaha/gupikk.git
 cd gupikk
 
 # Buka di browser
-# Buka file setup.html untuk setup pertama kali
+# Buka file login.html untuk mulai menggunakan
 ```
 
 ## 🚀 Cara Setup (Pertama Kali)
 
-### Metode 1: Menggunakan Halaman Setup (Recommended)
+### Langkah 1: Buat User Dummy
 
-1. Buka file `setup.html` di browser
-2. Klik tombol **"Jalankan Semua Setup"**
-3. Tunggu proses selesai
-4. Login di `login.html`
-
-### Metode 2: Manual via Console
-
-1. Buka `index.html` di browser
-2. Buka **Console** browser (F12)
-3. Jalankan perintah berikut:
+1. Buka `login.html` di browser
+2. Buka **Console** browser (tekan F12)
+3. Jalankan perintah:
 
 ```javascript
-// Langkah 1: Buat user
 seedUsers()
+```
 
-// Langkah 2: Tambah data dummy
+4. Tunggu proses selesai (akan muncul popup konfirmasi)
+
+### Langkah 2: Tambah Data Dummy
+
+Masih di console yang sama, jalankan:
+
+```javascript
 seedData()
 ```
 
-4. Buka `login.html` untuk login
+5. Tunggu proses selesai
+
+### Langkah 3: Login
+
+Setelah setup selesai, gunakan salah satu akun demo di halaman login:
+- **Superadmin:** admin@gupikkk.com / admin123
+- **Petugas Gudang:** gudang@gupikkk.com / gudang123
+- **Kasir:** kasir@gupikkk.com / kasir123
 
 ## 👤 Akun Demo
 
@@ -88,7 +94,6 @@ tugas-pak-wahyudi/
 ├── login.html              # Halaman Login
 ├── kasir.html              # Halaman Kasir (POS)
 ├── gudang.html             # Halaman Petugas Gudang
-├── setup.html              # Halaman Setup Awal
 ├── css/
 │   └── style.css           # Stylesheet utama
 ├── js/
@@ -269,7 +274,7 @@ service cloud.firestore {
 ### Local Development
 1. Clone/download repository
 2. Update `js/firebase-config.js` dengan credentials Firebase Anda
-3. Buka `setup.html` untuk setup awal
+3. Buka `login.html` dan ikuti instruksi setup di console
 4. Buka `login.html` untuk mulai menggunakan
 
 ## 📝 Notes

@@ -1,7 +1,6 @@
 // ==========================================
-// Firebase Configuration
-// ISI DENGAN CREDENTIAL FIREBASE ANDA
-// Copy dari Firebase Console > Project Settings > Your apps
+// Firebase Configuration Example
+// Copy file ini menjadi firebase-config.js dan isi dengan credential Firebase Anda
 // ==========================================
 
 const firebaseConfig = {
